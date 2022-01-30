@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from tqdm import trange
 import os, sys
 
@@ -11,6 +10,8 @@ def download(refresh=False):
     # we can override re-downloading to the data folder if we want
     if not refresh:
         return
+
+    print('Scraping for all downloads. . .')
 
     # scrape thge website for all available files
     from lxml import html
@@ -54,7 +55,7 @@ def download(refresh=False):
             with open(os.path.join('data', urls[i][-34:]), 'w') as f:
                 f.write(r.text)
 
-def load(csvs=None):
+def load(csvs=None, nrows=None):
 
     # construct paths for data files if not supplied, platform independent
     if not csvs:
@@ -72,8 +73,9 @@ def load(csvs=None):
     # if there is no data exit early
     if len(csvs) < 1: sys.exit('No data in data folder!')
 
+    print('Loading all data into DataFrame. . .')
     # platform independent read all csv in 'data' folder
-    df = pd.concat([pd.read_csv(csv) for csv in csvs])
+    df = pd.concat([pd.read_csv(csv, nrows=nrows) for csv in csvs])
 
     # reorder by date, newest to oldest
     df['VALIDATION_DATE'] = pd.to_datetime(df['VALIDATION_DATE'])
@@ -81,16 +83,8 @@ def load(csvs=None):
 
     return df.reset_index(drop=True)
 
+def get_data(refresh=False, csvs=None, nrows=None):
 
-def main():
-
-    # download all the data
     download(refresh=refresh)
 
-    # construct list of data directories
-    df = load()
-
-    print(df)
-
-if __name__ == '__main__':
-    main()
+    return load(csvs=csvs, nrows=nrows)
