@@ -88,3 +88,18 @@ def get_data(refresh=False, csvs=None, nrows=None):
     download(refresh=refresh)
 
     return load(csvs=csvs, nrows=nrows)
+
+def save_feather():
+
+    download(refresh=True)
+
+    print('Saving to .feather in data folder')
+    load().to_feather(os.path.join('data', 'data.feather'))
+
+def load_feather():
+
+    # get and save a feather file if it does not exist
+    if not 'data.feather' in os.listdir('data'): save_feather()
+
+    # return df from feather file
+    return pd.read_feather(os.path.join('data', 'data.feather'))
