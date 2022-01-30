@@ -89,17 +89,17 @@ def get_data(refresh=False, csvs=None, nrows=None):
 
     return load(csvs=csvs, nrows=nrows)
 
-def save_feather():
+def save_pickle():
 
-    download(refresh=True)
+    download(refresh=False)
 
-    print('Saving to .feather in data folder')
-    load().to_feather(os.path.join('data', 'data.feather'))
+    print('Loading and saving to data.pkl in data folder')
+    load().to_pickle(os.path.join('data', 'data.pkl'))
 
-def load_feather():
+def load_pickle():
 
     # get and save a feather file if it does not exist
-    if not 'data.feather' in os.listdir('data'): save_feather()
+    if not 'data.pkl' in os.listdir('data'): save_pickle()
 
     # return df from feather file
-    return pd.read_feather(os.path.join('data', 'data.feather'))
+    return pd.read_pickle(os.path.join('data', 'data.pkl'))
