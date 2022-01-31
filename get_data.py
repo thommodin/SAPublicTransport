@@ -89,17 +89,29 @@ def get_data(refresh=False, csvs=None, nrows=None):
 
     return load(csvs=csvs, nrows=nrows)
 
-def save_pickle():
+def save_pickle(refresh=False):
 
-    download(refresh=False)
+    download(refresh=refresh)
 
     print('Loading and saving to data.pkl in data folder')
     load().to_pickle(os.path.join('data', 'data.pkl'))
 
 def load_pickle():
 
+    # check there is a 'data' folder
+    if 'data' not in os.listdir():
+
+        # make the data folder
+        os.mkdir('data')
+
+        # override refresh
+        refresh = True
+
+    # override refresh also if there is not much data in the data folder
+    elif len(os.listdir('data')) < 5: refresh = True
+
     # get and save a feather file if it does not exist
-    if not 'data.pkl' in os.listdir('data'): save_pickle()
+    if 'data.pkl' not in os.listdir('data'): save_pickle(refresh=refresh)
 
     # return df from feather file
     return pd.read_pickle(os.path.join('data', 'data.pkl'))
