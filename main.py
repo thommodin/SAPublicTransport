@@ -17,5 +17,6 @@ def main():
 
     print(train.head(50))
 
+    print(train['ROUTE_CODE'].unique())
 if __name__ == '__main__':
     main()

@@ -112,6 +112,9 @@ def load_pickle():
 
     # get and save a feather file if it does not exist
     if 'data.pkl' not in os.listdir('data'): save_pickle(refresh=refresh)
+    else: print('Loading cached data.pkl file. . .')
 
     # return df from feather file
-    return pd.read_pickle(os.path.join('data', 'data.pkl'))
+    df = pd.read_pickle(os.path.join('data', 'data.pkl'))
+    print('Loaded pickle!')
+    return df
